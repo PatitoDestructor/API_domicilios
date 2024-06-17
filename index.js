@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 
 // Función para crear la tabla
 function createTable() {
-    const sql = 'CREATE TABLE IF NOT EXISTS domicilios (id_domicilio INTEGER PRIMARY KEY, novedades TEXT, id_estado INTEGER, id_pedido INTEGER)';
+    const sql = 'CREATE TABLE IF NOT EXISTS domicilios (id_domicilio INTEGER PRIMARY KEY, direccion TEXT, descripcion TEXT, valorPrenda INTEGER, valorDomicilio INTEGER, valorPagar INTEGER, estado TEXT, novedades TEXT)';
     db.run(sql, (err) => {
         if (err) {
             console.error(err.message);
@@ -43,9 +43,9 @@ function createTable() {
 // Ruta para manejar el POST
 app.post('/domicilios', (req, res) => {
     try {
-        const { novedades, id_estado, id_pedido} = req.body;
-        const sql = 'INSERT INTO domicilios (novedades, id_estado, id_pedido) VALUES (?, ?, ?)';
-        db.run(sql, [novedades, id_estado,  id_pedido], function(err) {
+        const { direccion, descripcion, valorPrenda, valorDomicilio, valorPagar, estado, novedades} = req.body;
+        const sql = 'INSERT INTO domicilios (direccion, descripcion, valorPrenda, valorDomicilio, valorPagar, estado, novedades) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        db.run(sql, [direccion, descripcion, valorPrenda, valorDomicilio, valorPagar, estado, novedades], function(err) {
             if (err) {
                 console.error('Error al insertar el domicilio: ' + err.message);
                 res.status(400).json({ status: 400, success: false });
@@ -100,9 +100,9 @@ app.get('/domicilios/:id', (req, res) => {
 // Ruta para manejar el PUT de una usuarios por ID
 app.put('/domicilios/:id', (req, res) => {
     const id = req.params.id;
-    const {novedades, id_estado, id_pedido } = req.body;
-    const sql = 'UPDATE domicilios SET novedades = ?, id_estado = ?, id_pedido = ? WHERE id_domicilio = ?';
-    db.run(sql, [novedades, id_estado, id_pedido, id], function(err) {
+    const {direccion, descripcion, valorPrenda, valorDomicilio, valorPagar, estado, novedades } = req.body;
+    const sql = 'UPDATE domicilios SET direccion = ?, descripcion = ?, valorPrenda = ?, valorDomicilio = ?, valorPagar = ?, estado = ?, novedades = ?  WHERE id_domicilio = ?';
+    db.run(sql, [direccion, descripcion, valorPrenda, valorDomicilio, valorPagar, estado, novedades, id], function(err) {
         if (err) {
             console.error('Error al actualizar domicilios: ' + err.message);
             res.status(400).json({ status: 400, success: false });
